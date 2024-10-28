@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      # Optional environment variables for future extensions
+      MONGO_URL: "mongodb://the_username:the_password@mongo:27017/the_database"
+      REDIS_URL: "redis://redis:6379"
+    depends_on:
+      - mongo
+      - redis
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "3456:27017"
+    volumes:
+      - mongo-data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: the_database
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+
+volumes:
+  mongo-data:
+  redis-data:
